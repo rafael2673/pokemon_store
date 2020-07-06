@@ -1,0 +1,6 @@
+.card-img-top {
+  max-width: 150px;
+}
+.selected {
+  background-color: greenyellow;
+}
