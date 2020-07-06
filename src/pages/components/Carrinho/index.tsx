@@ -10,6 +10,7 @@ interface Pokemons {
   id: number;
   name: string;
   sprites: string;
+  price: number;
 }
 export default function App({ getId, handleCarrinho, setId }: CardProps) {
   const [selectedPokemons, setSelectedPokemons] = useState<Pokemons[]>([]);
@@ -28,10 +29,12 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
           const filteredItems = selectedPokemons.filter(item => item.id !== id);
           setSelectedPokemons(filteredItems);
         } else {
+          const price: number = resp.data.base_experience;
           setSelectedPokemons([...selectedPokemons, {
             id: resp.data.id,
             name: resp.data.name,
-            sprites: resp.data.sprites.front_default
+            sprites: resp.data.sprites.front_default,
+            price: price,
           }])
 
         }
@@ -53,7 +56,8 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
           {selectedPokemons ? selectedPokemons.map(pokemon => (
             <tr key={pokemon.id}>
               <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
-              <td colSpan={2}>{pokemon.name}</td>
+              <td>{pokemon.name}</td>
+              <td>{`R$${pokemon.price}`}</td>
             </tr>
           )) : ''}
           <tr>
