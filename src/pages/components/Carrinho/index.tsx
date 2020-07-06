@@ -1,6 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../../../service/api';
 
-export default function App() {
+type CardProps = {
+  getId: number,
+  handleCarrinho(id: number): void
+  setId(id: number): void
+}
+interface Pokemons {
+  id: number;
+  name: string;
+  sprites: string;
+}
+export default function App({ getId, handleCarrinho, setId }: CardProps) {
+  const [selectedPokemons, setSelectedPokemons] = useState<Pokemons[]>([]);
+
+  useEffect(() => {
+
+    if (getId > 0) {
+      api.get(`pokemon/${getId}`).then(resp => {
+        setId(0);
+        const id: number = resp.data.id;
+        console.log(resp.data)
+        const teste = selectedPokemons.findIndex(item => item.id === id);
+        handleCarrinho(id);
+
+        if (teste >= 0) {
+          const filteredItems = selectedPokemons.filter(item => item.id !== id);
+          setSelectedPokemons(filteredItems);
+        } else {
+          setSelectedPokemons([...selectedPokemons, {
+            id: resp.data.id,
+            name: resp.data.name,
+            sprites: resp.data.sprites.front_default
+          }])
+
+        }
+      })
+    }
+    // console.log(selectedPokemons)
+  }, [getId, handleCarrinho, selectedPokemons, setId]);
   return (
     <div className="right col-lg-4 col-sm-4">
       <table className="table table-hover">
@@ -12,17 +50,12 @@ export default function App() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr style={{height: 100}}></tr>
+          {selectedPokemons ? selectedPokemons.map(pokemon => (
+            <tr key={pokemon.id}>
+              <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
+              <td colSpan={2}>{pokemon.name}</td>
+            </tr>
+          )) : ''}
           <tr>
             <td colSpan={2}>Total</td>
             <td>R$000</td>
