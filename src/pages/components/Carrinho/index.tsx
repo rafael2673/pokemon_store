@@ -21,7 +21,6 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
       api.get(`pokemon/${getId}`).then(resp => {
         setId(0);
         const id: number = resp.data.id;
-        console.log(resp.data)
         const teste = selectedPokemons.findIndex(item => item.id === id);
         handleCarrinho(id);
 

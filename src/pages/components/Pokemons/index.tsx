@@ -13,7 +13,8 @@ interface Pokemons {
 interface Pokemon {
   id: number,
   name: string,
-  url: string
+  url: string,
+  price: number,
 }
 
 type Props = {
@@ -22,7 +23,7 @@ type Props = {
 
 export default function App({ busca }: Props) {
   const [pokemons, setPokemons] = useState<Pokemons[]>([]);
-  const [pokemon, setPokemon] = useState<Pokemon>({ id: 0, name: '', url: '' });
+  const [pokemon, setPokemon] = useState<Pokemon>({ id: 0, name: '', url: '', price: 0 });
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [ids, setIds] = useState(0);
   const [url, setURL] = useState('');
@@ -30,7 +31,7 @@ export default function App({ busca }: Props) {
   useEffect(() => {
 
     if (busca === null || busca === '') {
-      const pokemon: Pokemon = {id: 0, name: '', url: ''} 
+      const pokemon: Pokemon = { id: 0, name: '', url: '', price: 0 }
       setPokemon(pokemon);
       api.get('pokemon/?limit=21').then(resp => {
         setPokemons(resp.data.results);
@@ -41,10 +42,10 @@ export default function App({ busca }: Props) {
     } else {
 
       api.get(`pokemon/${busca}`).then(resp => {
-        console.log(resp.data);
         const { id, name } = resp.data;
         const sprite = resp.data.sprites.front_default;
-        const pokemon: Pokemon = { id: id, name: name, url: sprite }
+        const { base_experience } = resp.data;
+        const pokemon: Pokemon = { id: id, name: name, url: sprite, price: base_experience }
         setPokemon(pokemon);
       }
       );
@@ -104,7 +105,6 @@ export default function App({ busca }: Props) {
 
   return (
     <>
-
       <div className="row">
         <div className="left col-lg-6 col-sm-6" onMouseOver={handleOver}>
           <div className="row row-cols-1 row-cols-md-3">
@@ -134,12 +134,11 @@ export default function App({ busca }: Props) {
                   </div>
                   <div className="card-body">
                     <img src={pokemon.url} alt="pokemon" className="card-img-top" />
+                    <i>{`R$${pokemon.price}`}</i>
                     <p className="card-text">{pokemon.name}</p>
                   </div>
                 </div>
               </div>
-
-
             }
           </div>
         </div>
