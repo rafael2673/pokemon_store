@@ -1,0 +1,10 @@
+span {
+  padding-right: 5px;
+  margin-left: 5px;
+}
+
+.price {
+  position: relative;
+  top: 25px;
+  right: 60px;
+}
