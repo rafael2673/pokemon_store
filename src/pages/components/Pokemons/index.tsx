@@ -106,6 +106,7 @@ export default function App({ busca }: Props) {
   }
   function handleNumber(url: string){
     api.get(`pokemon${url}`).then(resp => {
+      setPokemon({ id: 0, name: '', url: '', price: 0 });
       setPokemons(resp.data.results);
       setURL(resp.data.next);
       setUrlPrev(resp.data.previous);
