@@ -26,6 +26,7 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
       setPrice(price + selectedPokemons[selectedPokemons.length - 1].price)
       setContador(contador + 1);
     }
+    
     if (getId > 0) {
 
       api.get(`pokemon/${getId}`).then(resp => {
@@ -33,6 +34,7 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
         const id: number = resp.data.id;
         const teste = selectedPokemons.findIndex(item => item.id === id);
         handleCarrinho(id);
+        
 
 
         if (teste >= 0) {
@@ -40,6 +42,10 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
           setPrice(price - selectedPokemons[teste].price);
           setContador(contador - 1);
           setSelectedPokemons(filteredItems);
+
+          localStorage.setItem('selectedPokemons', JSON.stringify(filteredItems));
+          localStorage.setItem('price', String(price));
+          localStorage.setItem('contador', String(contador));
 
         } else {
           const preco: number = resp.data.base_experience;
@@ -49,19 +55,37 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
             sprites: resp.data.sprites.front_default,
             price: preco,
           }])
+          localStorage.setItem('selectedPokemons', JSON.stringify(selectedPokemons));
+          localStorage.setItem('price', String(price));
+          localStorage.setItem('contador', String(contador));
         }
       })
 
     }
   }, [getId, handleCarrinho, selectedPokemons, setId, price, contador]);
-  
-  function handleClose(){
+
+  useEffect(() => {
+    if (localStorage.getItem('selectedPokemons') !== null && contador === 0 ) {
+      const pokemons: Pokemons[] = JSON.parse(localStorage.getItem('selectedPokemons') as string);
+      const price: number = Number(localStorage.getItem('price'));
+      const contador: number = Number(localStorage.getItem('contador'));
+      
+      return (
+        setSelectedPokemons(pokemons),
+        setPrice(price),
+        setContador(contador)
+      )
+    }
+  }, [contador])
+
+  function handleClose() {
     setSelectedPokemons([]);
     setPrice(0);
     setContador(0);
     setId(0);
+    localStorage.clear();
     reiniciar();
-    
+
   }
 
   return (
@@ -81,17 +105,17 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
             {selectedPokemons ? selectedPokemons.map(pokemon => (
               <tr key={pokemon.id}>
                 <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
-                <td><span className = "informations">{pokemon.name}</span></td>
-                <td><span className = "informations">{`R$${pokemon.price}`}</span></td>
+                <td><span className="informations">{pokemon.name}</span></td>
+                <td><span className="informations">{`R$${pokemon.price}`}</span></td>
               </tr>
             )) : ''}
           </tbody>
         </table>
-        <div className = "total">
-          <span className = "span">Total</span>
+        <div className="total">
+          <span className="span">Total</span>
           <span>{`R$${price}`}</span>
         </div>
-        <Modal selectedPokemons={selectedPokemons} close = {handleClose} />
+        <Modal selectedPokemons={selectedPokemons} close={handleClose} />
       </div>
     </div>
   );

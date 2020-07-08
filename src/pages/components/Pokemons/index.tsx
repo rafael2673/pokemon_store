@@ -52,6 +52,13 @@ export default function App({ busca }: Props) {
     }
   }, [busca]);
 
+  useEffect(() => {
+    if (localStorage.getItem('selectedItems') !== null && selectedItems.length === 0) {
+      const items: number[] = Array.from(JSON.parse(localStorage.getItem('selectedItems') as string));
+      return setSelectedItems(items);
+    }
+  }, [selectedItems.length])
+
 
   function setId(id: number) {
     setIds(id);
@@ -76,12 +83,15 @@ export default function App({ busca }: Props) {
       const filteredItems = selectedItems.filter(item => item !== id);
 
       setSelectedItems(filteredItems);
+      localStorage.setItem('selectedItems', JSON.stringify(filteredItems));
     } else {
       setSelectedItems([...selectedItems, id]);
+      localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
     }
   }
   function reiniciar() {
     setSelectedItems([]);
+    localStorage.clear();
   }
   function handleOver() {
     console.log("passou por cima")
