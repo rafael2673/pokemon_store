@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../../service/api';
 import Modal from '../Modal';
-
+import './style.css';
 type CardProps = {
   getId: number,
   handleCarrinho(id: number): void,
@@ -18,8 +18,8 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
   const [selectedPokemons, setSelectedPokemons] = useState<Pokemons[]>([]);
   const [price, setPrice] = useState(0);
   const [contador, setContador] = useState(0);
-  
-  
+
+
   useEffect(() => {
 
     if ((selectedPokemons.length) - 1 === contador) {
@@ -27,7 +27,7 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
       setContador(contador + 1);
     }
     if (getId > 0) {
-      
+
       api.get(`pokemon/${getId}`).then(resp => {
         setId(0);
         const id: number = resp.data.id;
@@ -51,40 +51,40 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
           }])
         }
       })
-      
+
     }
   }, [getId, handleCarrinho, selectedPokemons, setId, price, contador]);
 
 
   return (
     <div className="right col-lg-4 col-sm-4">
-      <table className="table table-hover">
-        <thead className="thead-dark">
-          <tr>
-            <th scope="col" colSpan={3}>
-              <h1 id="titulo" >Carrinho</h1>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedPokemons ? selectedPokemons.map(pokemon => (
-            <tr key={pokemon.id}>
-              <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
-              <td>{pokemon.name}</td>
-              <td>{`R$${pokemon.price}`}</td>
+      <div className="table-responsive-sm">
+        <table className="table table-hover">
+          <thead className="thead-dark">
+            <tr>
+              <th scope="col" colSpan={3}>
+                <h1 id="titulo" >Carrinho</h1>
+              </th>
             </tr>
-          )) : ''}
-          <tr>
-            <td colSpan={2}>Total</td>
-            <td>{`R$${price}`}</td>
-          </tr>
-          <tr>
-            <td colSpan={3}>
-              <Modal selectedPokemons = {selectedPokemons}/>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+
+
+          <tbody className="scroll">
+            {selectedPokemons ? selectedPokemons.map(pokemon => (
+              <tr key={pokemon.id}>
+                <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
+                <td><span className = "informations">{pokemon.name}</span></td>
+                <td><span className = "informations">{`R$${pokemon.price}`}</span></td>
+              </tr>
+            )) : ''}
+          </tbody>
+        </table>
+        <div className = "total">
+          <span className = "span">Total</span>
+          <span>{`R$${price}`}</span>
+        </div>
+        <Modal selectedPokemons={selectedPokemons} />
+      </div>
     </div>
   );
 }
