@@ -28,6 +28,8 @@ export default function App({ busca }: Props) {
   const [ids, setIds] = useState(0);
   const [url, setURL] = useState('');
   const [urlPrev, setUrlPrev] = useState('');
+  const [count, setCount] = useState(0);
+
   useEffect(() => {
 
     if (busca === null || busca === '') {
@@ -37,6 +39,7 @@ export default function App({ busca }: Props) {
         setPokemons(resp.data.results);
         setURL(resp.data.next);
         setUrlPrev(resp.data.previous);
+        setCount(resp.data.count);
       }
       );
     } else {
@@ -71,7 +74,7 @@ export default function App({ busca }: Props) {
     return url.slice(26, 60);
   }
   function getUrlPrev() {
-    if (urlPrev !== null) {
+    if (urlPrev !== null && urlPrev !== undefined) {
       return urlPrev.slice(26, 60);
     } else {
       return null;
@@ -92,9 +95,22 @@ export default function App({ busca }: Props) {
   function reiniciar() {
     setSelectedItems([]);
     localStorage.clear();
+    api.get("pokemon/?limit=21").then(resp => {
+      setPokemons(resp.data.results);
+      setURL(resp.data.next);
+      setUrlPrev(resp.data.previous);
+    });
   }
   function handleOver() {
     console.log("passou por cima")
+  }
+  function handleNumber(url: string){
+    api.get(`pokemon${url}`).then(resp => {
+      setPokemons(resp.data.results);
+      setURL(resp.data.next);
+      setUrlPrev(resp.data.previous);
+    }
+    );
   }
   function handleNext() {
     api.get(getUrl()).then(resp => {
@@ -161,7 +177,8 @@ export default function App({ busca }: Props) {
         reiniciar = {reiniciar}/>
       </div>
       <Pagination handleNext={handleNext}
-        getUrlPrev={getUrlPrev} handlePrev={handlePrev}
+        getUrlPrev={getUrlPrev} handlePrev={handlePrev} 
+        count = {count} handleNumber = {handleNumber}
       />
     </>
   );

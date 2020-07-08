@@ -1,0 +1,7 @@
+.pagination {
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
+  max-width: 1050px !important;
+  flex-wrap: wrap;
+	margin: 0 auto;
+}

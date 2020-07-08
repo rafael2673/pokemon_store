@@ -26,8 +26,18 @@ export default function App(props: any) {
                   <h5>Compra realizada.</h5>
                   {props.selectedPokemons.map((pokemon: any) => (
                     <div key={pokemon.id}>
-                      <img src={pokemon.sprites} alt={pokemon.name} />
-                      <span>{pokemon.name}</span><span className="price">{`R$${pokemon.price}`}</span>
+                      {pokemon.sprites !== null ?
+                  <>
+                    <img src={pokemon.sprites} alt="Pokemon" className="card-img-top" />
+                    <span>{pokemon.name}</span>
+                    <span className="price">{`R$${pokemon.price}`}</span>
+                  </>
+                  :
+                  <>
+                    <span>{pokemon.name}</span>
+                    <span>{`R$${pokemon.price}`}</span>
+                  </>
+                }
                     </div>
                   ))}
                 </div>

@@ -16,8 +16,12 @@ export default function App(props: any) {
 
   return (
     <>
-      <img src={sprite} alt="pokemon" className="card-img-top" />
-      <br/>
+      {sprite !== null ?
+        <>
+          <img src={sprite} alt="Pokemon" className="card-img-top" />
+          <br />
+        </>
+        : ''}
       <i>{`R$${price}`}</i>
     </>
   );

@@ -26,7 +26,7 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
       setPrice(price + selectedPokemons[selectedPokemons.length - 1].price)
       setContador(contador + 1);
     }
-    
+
     if (getId > 0) {
 
       api.get(`pokemon/${getId}`).then(resp => {
@@ -34,7 +34,7 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
         const id: number = resp.data.id;
         const teste = selectedPokemons.findIndex(item => item.id === id);
         handleCarrinho(id);
-        
+
 
 
         if (teste >= 0) {
@@ -65,11 +65,11 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
   }, [getId, handleCarrinho, selectedPokemons, setId, price, contador]);
 
   useEffect(() => {
-    if (localStorage.getItem('selectedPokemons') !== null && contador === 0 ) {
+    if (localStorage.getItem('selectedPokemons') !== null && contador === 0) {
       const pokemons: Pokemons[] = JSON.parse(localStorage.getItem('selectedPokemons') as string);
       const price: number = Number(localStorage.getItem('price'));
       const contador: number = Number(localStorage.getItem('contador'));
-      
+
       return (
         setSelectedPokemons(pokemons),
         setPrice(price),
@@ -104,9 +104,18 @@ export default function App({ getId, handleCarrinho, setId, reiniciar }: CardPro
           <tbody className="scroll">
             {selectedPokemons ? selectedPokemons.map(pokemon => (
               <tr key={pokemon.id}>
-                <td><img src={pokemon.sprites} alt={pokemon.name} /></td>
-                <td><span className="informations">{pokemon.name}</span></td>
-                <td><span className="informations">{`R$${pokemon.price}`}</span></td>
+                {pokemon.sprites !== null ?
+                  <>
+                    <td><img src={pokemon.sprites} alt="Pokemon" className="card-img-top" /></td>
+                    <td><span className="informations">{pokemon.name}</span></td>
+                    <td><span className="informations">{`R$${pokemon.price}`}</span></td>
+                  </>
+                  :
+                  <>
+                    <td colSpan={2}><span>{pokemon.name}</span></td>
+                    <td><span>{`R$${pokemon.price}`}</span></td>
+                  </>
+                }
               </tr>
             )) : ''}
           </tbody>
