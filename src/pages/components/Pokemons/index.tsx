@@ -70,13 +70,6 @@ export default function App({ busca }: Props) {
       return null;
     }
   }
-  // function setTotal(){
-  //   if (selectedItems.length > 0) {
-  //     for (let i = 0; i < selectedPokemons.length; i++) {
-  //       setPrice(price + selectedPokemons[i].price);
-  //     }
-  //   }
-  // }
   function handleCarrinho(id: number) {
     const alreadSelected = selectedItems.findIndex(item => item === id);
     if (alreadSelected >= 0) {
@@ -86,6 +79,9 @@ export default function App({ busca }: Props) {
     } else {
       setSelectedItems([...selectedItems, id]);
     }
+  }
+  function reiniciar() {
+    setSelectedItems([]);
   }
   function handleOver() {
     console.log("passou por cima")
@@ -152,7 +148,7 @@ export default function App({ busca }: Props) {
         <div className="center col-lg-1 col-sm-1"></div>
 
         <Carrinho handleCarrinho={handleCarrinho} getId={getId()} setId={setId} 
-        />
+        reiniciar = {reiniciar}/>
       </div>
       <Pagination handleNext={handleNext}
         getUrlPrev={getUrlPrev} handlePrev={handlePrev}

@@ -6,7 +6,7 @@ type CardProps = {
   getId: number,
   handleCarrinho(id: number): void,
   setId(id: number): void,
-
+  reiniciar(): void
 }
 interface Pokemons {
   id: number;
@@ -14,7 +14,7 @@ interface Pokemons {
   sprites: string;
   price: number;
 }
-export default function App({ getId, handleCarrinho, setId }: CardProps) {
+export default function App({ getId, handleCarrinho, setId, reiniciar }: CardProps) {
   const [selectedPokemons, setSelectedPokemons] = useState<Pokemons[]>([]);
   const [price, setPrice] = useState(0);
   const [contador, setContador] = useState(0);
@@ -54,7 +54,15 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
 
     }
   }, [getId, handleCarrinho, selectedPokemons, setId, price, contador]);
-
+  
+  function handleClose(){
+    setSelectedPokemons([]);
+    setPrice(0);
+    setContador(0);
+    setId(0);
+    reiniciar();
+    
+  }
 
   return (
     <div className="right col-lg-4 col-sm-4">
@@ -83,7 +91,7 @@ export default function App({ getId, handleCarrinho, setId }: CardProps) {
           <span className = "span">Total</span>
           <span>{`R$${price}`}</span>
         </div>
-        <Modal selectedPokemons={selectedPokemons} />
+        <Modal selectedPokemons={selectedPokemons} close = {handleClose} />
       </div>
     </div>
   );

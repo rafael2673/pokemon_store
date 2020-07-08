@@ -2,8 +2,8 @@ import React from 'react';
 import './style.css'
 
 export default function App(props: any) {
-  function handleClose(){
-    
+  function handleClose() {
+    props.close();
   }
   return (
     <>
@@ -25,14 +25,14 @@ export default function App(props: any) {
                 <div className="modal-body">
                   <h5>Compra realizada.</h5>
                   {props.selectedPokemons.map((pokemon: any) => (
-                    <div key = {pokemon.id}>
+                    <div key={pokemon.id}>
                       <img src={pokemon.sprites} alt={pokemon.name} />
                       <span>{pokemon.name}</span><span className="price">{`R$${pokemon.price}`}</span>
                     </div>
                   ))}
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick = {handleClose}>Close</button>
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={handleClose}>Close</button>
                 </div>
               </div>
             </div>
@@ -42,7 +42,8 @@ export default function App(props: any) {
         <>
           <button type="button" className="btn btn-secondary w-100" data-toggle="modal" data-target="#alert">
             Finalizar
-        </button>
+          </button>
+
           <div className="modal fade" id="alert" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div className="modal-dialog">
               <div className="modal-content">
@@ -53,7 +54,7 @@ export default function App(props: any) {
                   </button>
                 </div>
                 <div className="modal-body">
-                  <span className="alert alert-danger" role="alert">Precisa adicionar algum item ao carrinho para finalizar sua compra.</span>
+                  <div className="alert alert-danger" role="alert">Precisa adicionar algum item ao carrinho para finalizar sua compra.</div>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
