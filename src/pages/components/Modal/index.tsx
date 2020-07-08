@@ -2,7 +2,6 @@ import React from 'react';
 import './style.css'
 
 export default function App(props: any) {
-  // const history = useHistory();
   function handleClose(){
     
   }

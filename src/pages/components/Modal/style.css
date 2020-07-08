@@ -8,3 +8,7 @@ span {
   top: 25px;
   right: 60px;
 }
+
+.btn {
+  max-width: 400px;
+}
